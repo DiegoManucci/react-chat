@@ -18,24 +18,10 @@ function App() {
 	const [user, setUser] = useState(null);
 	const [loggedIn, setLoggedIn] = useState(false);
 
-	useEffect(() => {
-
-		socket.on("connect", () => {
-			setLoggedIn(true);
-		});
-
-		socket.on("disconnect", () => {
-			//NAvigate to login on disconnect
-			socket.removeAllListeners();
-		});
-
-	});
-
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path='/' element={<Layout/>}>
-					<Route index element={<Login socket={socket} setUser={setUser}/>}/>
+				<Route path='/' element={<Layout socket={socket} setLoggedIn={setLoggedIn}/>}>
 					<Route path='login' element={<Login socket={socket} setUser={setUser}/>}/>
 					<Route path='general-chat' element={<PrivateRoute loggedIn={loggedIn} element={<Chat socket={socket}/>}/>}/>
 					<Route path='private-chat'/>

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "https://localhost:5000",
+  "homepage": "https://diego-react-chat.herokuapp.com/login",
   "dependencies": {
     "concurrently": "^7.3.0",
     "cors": "^2.8.5",
