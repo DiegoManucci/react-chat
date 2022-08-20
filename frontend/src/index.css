@@ -1,0 +1,52 @@
+:root {
+	--font-big: 20px;
+	--font-medium: 16px;
+	--font-small: 12px;
+
+	--color-black: #000000;
+	--color-dark-grey: #191a1b;
+	--color-middle-grey: #464646;
+	--color-light-grey: #9d9d9d;
+	--color-white: #ffffff;
+}
+
+html {
+	background-color: var(--color-dark-grey);
+	color: var(--color-light-grey);
+}
+
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+		monospace;
+}
+
+/* Scrollbar */
+/* Firefox */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--color-light-grey) var(--color-dark-grey);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+	width: 16px;
+}
+
+*::-webkit-scrollbar-track {
+	background: #191a1b;
+}
+
+*::-webkit-scrollbar-thumb {
+	background-color: var(--color-light-grey);
+	border-radius: 10px;
+	border: 4px none var(--color-white);
+}

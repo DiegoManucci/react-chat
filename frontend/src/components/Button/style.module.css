@@ -1,0 +1,20 @@
+.roundButton{
+    border-radius: 5px;
+    padding: 5px;
+    height: 40px;
+    width: 40px;
+    border-radius:100%;
+    border-width: 0;
+    background-color: var(--color-dark-grey);
+    color: var(--color-light-grey);
+}
+
+.rectangleButton{
+    border-radius: 5px;
+    padding: 5px;
+    font-size: var(--font-medium);
+    height: 30px;
+    width: 180px;
+    background-color: var(--color-dark-grey);
+    color: var(--color-light-grey);
+}

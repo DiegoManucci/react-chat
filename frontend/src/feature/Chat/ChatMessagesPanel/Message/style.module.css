@@ -1,0 +1,28 @@
+.messageContainer{
+    max-width: fit-content;
+    min-height: 50px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 15px;
+    background-color: rgb(70, 70, 70);
+}
+
+.messageAuthorContainer{
+    flex: 20;
+}
+.messageAuthor{
+    font-size: var(--font-medium);
+    color: #9b9b9b;
+}
+
+.messageTextContainer{
+    padding: 0 0 0 15px;
+    flex: 80;
+}
+.messageText{
+    word-break: break-all;
+    font-size: var(--font-medium);
+    color: #c9c9c9;
+}
