@@ -10,10 +10,7 @@ import Chat from './feature/Chat/index.js';
 const socket = io(process.env.REACT_APP_BACKEND_URL, {
 	cors: {
         origin: "*",
-    },
-    pingInterval: 2000,
-    pingTimeout: 50000,
-	transports: ['websocket'],
+    }
 }); // Deixar fora do App caso contrario efetua multiplas requisicoes
 
 function App() {

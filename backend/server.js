@@ -14,8 +14,6 @@ const io = socket(server, { // configurando cors para aceitar qualquer origem (d
     cors: {
         origin: "*",
     },
-    pingInterval: 2000,
-    pingTimeout: 5000,
 });
 
 /*****************************************************/
