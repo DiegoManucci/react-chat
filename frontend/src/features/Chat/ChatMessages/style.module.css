@@ -1,7 +1,4 @@
 .ChatMessagesContainer{
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
     padding: 15px;
     flex: 95 85;
     overflow-y: scroll;
@@ -9,4 +6,5 @@
 
 .ChatMessagesRow{
     display: flex;
+    padding: 10px;
 }

@@ -1,14 +1,17 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 
-import Message from "./Message/index";
+import Message from "../ChatMessage";
 
-import ChatMessagesPanelStyles from "./style.module.css"
+import ChatMessagesStyles from "./style.module.css"
+import {SocketContext} from "../../../context/SocketContext";
 
-function ChatMessagesPanel(props){
-    
+function ChatMessages(props){
+
+    const socket = useContext(SocketContext);
+
     const [messages, setMessages] = useState([]);
 
-    props.socket.on("server:message", ({message}) => {
+    socket.on("server:message", ({message}) => {
         setMessages(
             messages.concat({
                 "id": message.id, 
@@ -19,12 +22,12 @@ function ChatMessagesPanel(props){
     });
 
     return(
-        <div className={ChatMessagesPanelStyles.ChatMessagesContainer}>
+        <div className={ChatMessagesStyles.ChatMessagesContainer}>
             {
                 messages.map((message, i) => (
                     <div 
-                        className={ChatMessagesPanelStyles.ChatMessagesRow} 
-                        style={{flexDirection : message.id != props.socket.id ? "row-reverse" : "row"}} 
+                        className={ChatMessagesStyles.ChatMessagesRow}
+                        style={{flexDirection : message.id !== socket.id ? "row-reverse" : "row"}}
                         key={i}
                     >
                         <Message 
@@ -39,4 +42,4 @@ function ChatMessagesPanel(props){
     )
 }
 
-export default ChatMessagesPanel;
+export default ChatMessages;

@@ -1,33 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
 import { BrowserRouter, Route, Routes, Navigate} from 'react-router-dom';
 
-import PrivateRoute from './components/PrivateRoute/index.js';
-import Layout from './feature/Layout/index.js';
-import Login from './feature/Login/index.js';
-import Chat from './feature/Chat/index.js';
+import {SocketContext, socket} from "./context/SocketContext";
 
-const socket = io(process.env.REACT_APP_BACKEND_URL, {
-	cors: {
-        origin: "*",
-    }
-}); // Deixar fora do App caso contrario efetua multiplas requisicoes
+import PrivateRoute from './components/PrivateRoute/index.js';
+import LoginPage from "./pages/LoginPage";
+import ChatPage from "./pages/ChatPage";
 
 function App() {
 
-	const [user, setUser] = useState(null);
 	const [loggedIn, setLoggedIn] = useState(false);
 
 	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path='/' element={<Layout socket={socket} setLoggedIn={setLoggedIn}/>}>
-					<Route path='login' element={<Login socket={socket} setUser={setUser}/>}/>
-					<Route path='general-chat' element={<PrivateRoute loggedIn={loggedIn} element={<Chat socket={socket}/>}/>}/>
-					<Route path='private-chat'/>
-				</Route>
-			</Routes>
-		</BrowserRouter>
+		<SocketContext.Provider value={socket}>
+			<BrowserRouter>
+				<Routes>
+					<Route path='/login' element={<LoginPage setLoggedIn={setLoggedIn}/>}/>
+					<Route path='/general-chat' element={<PrivateRoute loggedIn={loggedIn} element={<ChatPage/>}/>}/>
+					<Route path='/private-chat'/>
+				</Routes>
+			</BrowserRouter>
+		</SocketContext.Provider>
 	);
 }
 

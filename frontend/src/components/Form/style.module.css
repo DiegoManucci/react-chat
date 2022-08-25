@@ -1,0 +1,11 @@
+.RectangleForm{
+    background-color: var(--color-middle-grey);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px;
+    width: fit-content;
+}

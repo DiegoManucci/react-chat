@@ -1,12 +1,15 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect, useContext} from "react";
 
-import {Button, ButtonStyles} from "../../../components/Button/index";
+import {Button, ButtonStyles} from "../../../components/Button";
 
 import { FaArrowRight } from "react-icons/fa";
 
-import ChatInputPanelStyles from "./style.module.css";
+import ChatInputStyles from "./style.module.css";
+import {SocketContext} from "../../../context/SocketContext";
 
-function ChatInputPanel(props){
+function ChatInput(props){
+
+    const socket = useContext(SocketContext);
 
     const inputRef = useRef(null);
     const formRef = useRef(null);
@@ -18,9 +21,9 @@ function ChatInputPanel(props){
 
 	const handleOnSubmit = (e) => {
         e.preventDefault();
-        if(message == "")
+        if(message === "")
         	return;
-		props.socket.emit('client:message', {text: message});
+		socket.emit('client:message', {text: message});
         inputRef.current.textContent = "";
         message = inputRef.current.textContent;
 	}
@@ -29,7 +32,7 @@ function ChatInputPanel(props){
         inputRef.current.focus();
 
         const handleKeyDown = (e) => {
-            if(e.keyCode == 13)
+            if(e.keyCode === 13)
                handleOnSubmit(e);
         };
 
@@ -41,14 +44,14 @@ function ChatInputPanel(props){
     })
 
     return(
-        <div className={ChatInputPanelStyles.chatInputContainer}>
+        <div className={ChatInputStyles.chatInputContainer}>
             <form
-                className={ChatInputPanelStyles.chatInputForm} 
+                className={ChatInputStyles.chatInputForm}
                 onSubmit={handleOnSubmit} 
                 ref={formRef}
             >
                 <div 
-                    className={ChatInputPanelStyles.chatInputTextInput}
+                    className={ChatInputStyles.chatInputTextInput}
                     ref={inputRef}
                     contentEditable={true}
                     placeholder="Send a message"
@@ -65,4 +68,4 @@ function ChatInputPanel(props){
     )
 }
 
-export default ChatInputPanel;
+export default ChatInput;

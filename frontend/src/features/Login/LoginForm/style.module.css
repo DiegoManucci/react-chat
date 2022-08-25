@@ -4,7 +4,7 @@
     justify-content: center;
     min-height: 100vh;
 }
-.loginForm{
+.loginFormForm{
     background-color: var(--color-middle-grey);
     border-radius: 5px;
     display: flex;

@@ -1,9 +1,22 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 
-function Input({innerRef, type, placeholder, handleOnChange, className}){
+function Input({innerRef, type, focus, placeholder, handleOnChange, className}){
+
+    const inputRef = useRef(null);
+
+    useEffect(() => {
+
+        innerRef = inputRef;
+
+        if(focus) {
+            inputRef.current.focus();
+        }
+
+    },[]);
+
     return(
         <input 
-            ref={innerRef}
+            ref={inputRef}
             type={type} 
             placeholder={placeholder} 
             onChange={handleOnChange} 
