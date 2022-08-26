@@ -1,67 +1,83 @@
-const express = require('express');
+const express = require("express");
 const application = express();
-const socket = require('socket.io');
-const cors = require('cors');
+const socket = require("socket.io");
+const cors = require("cors");
 
 application.use(express());
-application.use(cors()); 
+application.use(cors());
 
-const server = application.listen(process.env.PORT || 5000, // configura para rodar na porta definida pelo HOST caso contrario roda na 5000
-    console.log("Servidor rodando on port: " + (process.env.PORT || 5000))
+const server = application.listen(
+	process.env.PORT || 5000, // configura para rodar na porta definida pelo HOST caso contrario roda na 5000
+	console.log("Servidor rodando on port: " + (process.env.PORT || 5000))
 );
 
-const io = socket(server, { // configurando cors para aceitar qualquer origem (domain, scheme, or port)
-    cors: {
-        origin: "*",
-    },
+const io = socket(server, {
+	// configurando cors para aceitar qualquer origem (domain, scheme, or port)
+	cors: {
+		origin: "*",
+	},
 });
 
 /*****************************************************/
 
 let users = [];
+let rooms = [];
 
-io.on('connection', (socket) => { // eventos devem ficar dentro deste metodo
+io.on("connection", (socket) => {
+	// eventos devem ficar dentro deste metodo
 
-    socket.emit('client:connected', {response: true});
+	socket.emit("client:connected", { response: true });
 
-    socket.on('client:login', ({name}) => {
-        var user = {
-            "id": socket.id,
-            "name": name  
-        }
+	socket.on("client:login", (name) => {
+		let user = {
+			id: socket.id,
+			name: name,
+		};
 
-        console.log(user);
+		users.push(user);
 
-        users.push(user);
+		socket.emit("server:loginConfirmation", user);
+	});
 
-        socket.emit('server:login-confirmation', ({user}));
-    });
+	socket.on("client:joinPrivateRoom", (code) => {
+		rooms.push(code);
+		socket.join(code);
+		socket.emit("server:joinPrivateRoomConfirmation", code);
+	});
 
-    socket.on('client:message', ({text}) => {
-    
-        var user = getUserById(socket.id);
+	socket.on("client:joinGeneralRoom", () => {
+		rooms.push("general");
+		socket.join("general");
+		socket.emit("server:joinGeneralRoomConfirmation");
+	});
 
-        if(user == null)
-            return;
+	socket.on("client:message", ({ text, room }) => {
+		let user = getUserById(socket.id);
 
-        var message = {
-            "id": socket.id,
-            "author": user.name,
-            "text": text
-        }
+		if (user == null) return;
 
-        io.sockets.emit('server:message', ({message})); // emite o evento para todos os sockets
-    });
+		let message = {
+			id: socket.id,
+			author: user.name,
+			text: text,
+		};
 
-    socket.on("disconnect", () => {
-        var index = users.indexOf(getUserById(socket.id))
-        users.splice(index, 1);
-    });
+		if (room == null) {
+			io.to("general").emit("server:message", message);
+		} // emite o evento para todos os sockets na sala general
+		else {
+			io.to(room).emit("server:message", message);
+		} // emite o evento para todos os sockets na sala privada
+	});
 
+	socket.on("disconnect", () => {
+		let index = users.indexOf(getUserById(socket.id));
+		users.splice(index, 1);
+	});
 });
 
-function getUserById(id){
-    return users.find(elem => elem.id == id);
+function getUserById(id) {
+	return users.find((elem) => elem.id === id);
 }
 
 // application.get('/', (req, res) => { // get básico
@@ -70,12 +86,12 @@ function getUserById(id){
 
 /*******************************************/
 
-const path = require('path')
+const path = require("path");
 
 // Serve static files from the React frontend app
-application.use(express.static(path.join(__dirname, '../frontend/build')))
+application.use(express.static(path.join(__dirname, "../frontend/build")));
 
 // AFTER defining routes: Anything that doesn't match what's above, send back index.html; (the beginning slash ('/') in the string is important!)
-application.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/../frontend/build/index.html'))
-})
+application.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname + "/../frontend/build/index.html"));
+});

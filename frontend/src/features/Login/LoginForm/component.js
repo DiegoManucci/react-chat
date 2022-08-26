@@ -1,60 +1,55 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import {useNavigate} from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import {SocketContext} from "../../../context/SocketContext";
+import { SocketContext } from "../../../context/SocketContext";
 
-import {Button} from "../../../components/Button";
-import {ButtonStyles} from "../../../components/Button";
-import {Input} from "../../../components/Input";
-import {InputStyles} from "../../../components/Input";
-import {Form} from "../../../components/Form";
-import {FormStyles} from "../../../components/Form";
+import { Button } from "../../../components/Button";
+import { ButtonStyles } from "../../../components/Button";
+import { Input } from "../../../components/Input";
+import { InputStyles } from "../../../components/Input";
+import { Form } from "../../../components/Form";
+import { FormStyles } from "../../../components/Form";
 
-function LoginForm(props){
+function LoginForm(props) {
+	const socket = useContext(SocketContext);
+	const navigate = useNavigate();
 
-    const socket = useContext(SocketContext)
-    const navigate = useNavigate();
+	let name = "";
 
-    let name = "";
-
-    useEffect(() => {
-        socket.on("server:login-confirmation", ({user}) => {
-            props.setLoggedIn(true);
-			navigate("/general-chat");
+	useEffect(() => {
+		socket.on("server:loginConfirmation", (user) => {
+			props.setLoggedIn(true);
+			navigate("/room");
 		});
-    });
+	});
 
-    const handleOnSubmit = (e) => {
-        e.preventDefault();
-        socket.emit("client:login", {name: name});
-    }
-
-    const handleOnChange = (e) => {
-        name = e.target.value;
-    }
-
-    return(
-       <Form
-           className={FormStyles.RectangleForm}
-           label={"Login"}
-           handleOnSubmit={handleOnSubmit}
-       >
-            <Input
-                className={InputStyles.rectangleInput}
-                type={"text"}
-                placeholder={"Insert Name"}
-                handleOnChange={e => handleOnChange(e)}
-                focus={true}
-            />
-            <Button
-                type={"submit"}
-                className={ButtonStyles.rectangleButton}
-                label={"Login"}
-                handleOnClick={null}
-            />
-       </Form>
-    );
-
+	return (
+		<Form
+			className={FormStyles.RectangleForm}
+			label={"Login"}
+			handleOnSubmit={(e) => {
+				e.preventDefault();
+			}}
+		>
+			<Input
+				className={InputStyles.rectangleInput}
+				type={"text"}
+				placeholder={"Insert Name"}
+				focus={true}
+				handleOnChange={(e) => {
+					name = e.target.value;
+				}}
+			/>
+			<Button
+				type={"submit"}
+				className={ButtonStyles.rectangleButton}
+				label={"Login"}
+				handleOnClick={() => {
+					socket.emit("client:login", name);
+				}}
+			/>
+		</Form>
+	);
 }
 
 export default LoginForm;
